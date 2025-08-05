@@ -1,4 +1,4 @@
-// 🔊 Enable music after first user interaction
+// 🔊 Enable background music after first user interaction
 document.body.addEventListener('click', () => {
     const music = document.getElementById('bg-music');
     if (music && music.paused) {
@@ -11,14 +11,14 @@ document.body.addEventListener('click', () => {
 const board = document.querySelector('.game-board');
 const scoreDisplay = document.getElementById('score');
 
-// 🖼️ 15 images = 15 pairs = 30 cards
+// 🖼️ 15 image pairs = 30 cards
 const images = [
     '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg',
     '6.jpg', '7.jpg', '8.jpg', '9.jpg', '10.jpg',
     '11.jpg', '12.jpg', '13.jpg', '14.jpg', '15.jpg'
 ];
 
-const cards = [...images, ...images]; // duplicate for pairs
+const cards = [...images, ...images];
 let shuffled = cards.sort(() => 0.5 - Math.random());
 
 let firstCard = null;
@@ -27,7 +27,7 @@ let attempts = 0;
 let matchedPairs = 0;
 const totalPairs = images.length;
 
-// 🧩 Generate cards
+// 🧩 Create the cards
 shuffled.forEach(imageName => {
     const card = document.createElement('div');
     card.classList.add('card');
@@ -47,17 +47,38 @@ shuffled.forEach(imageName => {
 
             setTimeout(() => {
                 if (card.dataset.image === firstCard.dataset.image) {
+                    // ✅ Correct match
                     card.classList.add('matched');
                     firstCard.classList.add('matched');
                     matchedPairs++;
 
-                    // ✅ Show win message if all matched
+                    // 🔊 Play match sound
+                    const matchSound = document.getElementById('match-sound');
+                    if (matchSound) {
+                        matchSound.currentTime = 0;
+                        matchSound.play().catch(err => {
+                            console.warn("Couldn't play match sound:", err);
+                        });
+                    }
+
+                    // 🏆 If all pairs matched
                     if (matchedPairs === totalPairs) {
                         showWinMessage();
                     }
+
                 } else {
+                    // ❌ Not a match — flip back
                     card.style.backgroundImage = "url('img/back.png')";
                     firstCard.style.backgroundImage = "url('img/back.png')";
+
+                    // 🔊 Play wrong sound
+                    const wrongSound = document.getElementById('wrong-sound');
+                    if (wrongSound) {
+                        wrongSound.currentTime = 0;
+                        wrongSound.play().catch(err => {
+                            console.warn("Couldn't play wrong sound:", err);
+                        });
+                    }
                 }
 
                 firstCard = null;
@@ -69,7 +90,7 @@ shuffled.forEach(imageName => {
     board.appendChild(card);
 });
 
-// 🏆 Show winning message
+// 🎉 Show win message
 function showWinMessage() {
     const message = document.createElement('div');
     message.innerHTML = `
