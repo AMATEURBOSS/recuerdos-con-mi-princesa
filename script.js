@@ -1,7 +1,8 @@
-// 🔊 Enable background music after first user interaction
+// 🔊 Enable music after first click (and lower volume)
 document.body.addEventListener('click', () => {
     const music = document.getElementById('bg-music');
     if (music && music.paused) {
+        music.volume = 0.3; // 🔉 softer background music
         music.play().catch(err => {
             console.warn("Autoplay was blocked:", err);
         });
@@ -11,7 +12,7 @@ document.body.addEventListener('click', () => {
 const board = document.querySelector('.game-board');
 const scoreDisplay = document.getElementById('score');
 
-// 🖼️ 15 image pairs = 30 cards
+// 🖼️ Image list (15 pairs = 30 cards)
 const images = [
     '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg',
     '6.jpg', '7.jpg', '8.jpg', '9.jpg', '10.jpg',
@@ -27,7 +28,6 @@ let attempts = 0;
 let matchedPairs = 0;
 const totalPairs = images.length;
 
-// 🧩 Create the cards
 shuffled.forEach(imageName => {
     const card = document.createElement('div');
     card.classList.add('card');
@@ -52,29 +52,28 @@ shuffled.forEach(imageName => {
                     firstCard.classList.add('matched');
                     matchedPairs++;
 
-                    // 🔊 Play match sound
                     const matchSound = document.getElementById('match-sound');
                     if (matchSound) {
                         matchSound.currentTime = 0;
+                        matchSound.volume = 1.0;
                         matchSound.play().catch(err => {
                             console.warn("Couldn't play match sound:", err);
                         });
                     }
 
-                    // 🏆 If all pairs matched
                     if (matchedPairs === totalPairs) {
                         showWinMessage();
                     }
 
                 } else {
-                    // ❌ Not a match — flip back
+                    // ❌ Not a match
                     card.style.backgroundImage = "url('img/back.png')";
                     firstCard.style.backgroundImage = "url('img/back.png')";
 
-                    // 🔊 Play wrong sound
                     const wrongSound = document.getElementById('wrong-sound');
                     if (wrongSound) {
                         wrongSound.currentTime = 0;
+                        wrongSound.volume = 1.0;
                         wrongSound.play().catch(err => {
                             console.warn("Couldn't play wrong sound:", err);
                         });
@@ -90,7 +89,7 @@ shuffled.forEach(imageName => {
     board.appendChild(card);
 });
 
-// 🎉 Show win message
+// 🏆 Show win message
 function showWinMessage() {
     const message = document.createElement('div');
     message.innerHTML = `
@@ -99,3 +98,8 @@ function showWinMessage() {
   `;
     document.body.appendChild(message);
 }
+
+// 🔁 Restart game
+document.getElementById('restart-btn').addEventListener('click', () => {
+    location.reload();
+});
