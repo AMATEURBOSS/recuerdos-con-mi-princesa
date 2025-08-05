@@ -1,8 +1,8 @@
-// 🔊 Enable music after first click (and lower volume)
+// 🔊 Enable music on first click + volume control
 document.body.addEventListener('click', () => {
     const music = document.getElementById('bg-music');
     if (music && music.paused) {
-        music.volume = 0.3; // 🔉 softer background music
+        music.volume = 0.3;
         music.play().catch(err => {
             console.warn("Autoplay was blocked:", err);
         });
@@ -12,7 +12,6 @@ document.body.addEventListener('click', () => {
 const board = document.querySelector('.game-board');
 const scoreDisplay = document.getElementById('score');
 
-// 🖼️ Image list (15 pairs = 30 cards)
 const images = [
     '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg',
     '6.jpg', '7.jpg', '8.jpg', '9.jpg', '10.jpg',
@@ -28,6 +27,7 @@ let attempts = 0;
 let matchedPairs = 0;
 const totalPairs = images.length;
 
+// Create cards
 shuffled.forEach(imageName => {
     const card = document.createElement('div');
     card.classList.add('card');
@@ -47,7 +47,6 @@ shuffled.forEach(imageName => {
 
             setTimeout(() => {
                 if (card.dataset.image === firstCard.dataset.image) {
-                    // ✅ Correct match
                     card.classList.add('matched');
                     firstCard.classList.add('matched');
                     matchedPairs++;
@@ -66,7 +65,6 @@ shuffled.forEach(imageName => {
                     }
 
                 } else {
-                    // ❌ Not a match
                     card.style.backgroundImage = "url('img/back.png')";
                     firstCard.style.backgroundImage = "url('img/back.png')";
 
@@ -89,17 +87,35 @@ shuffled.forEach(imageName => {
     board.appendChild(card);
 });
 
-// 🏆 Show win message
+// 🏆 Win message with glow
 function showWinMessage() {
     const message = document.createElement('div');
     message.innerHTML = `
-    <h2 style="margin-top: 30px; color: #b83280;">¡Te ganaste mi amor! 💖</h2>
+    <h2 class="win-glow" style="margin-top: 30px; color: #b83280;">¡Te ganaste mi amor! 💖</h2>
     <p style="font-size: 1rem; color: #555;">Bueno... en realidad ya lo tenías 😉</p>
   `;
     document.body.appendChild(message);
 }
 
-// 🔁 Restart game
+// 🔁 Restart button
 document.getElementById('restart-btn').addEventListener('click', () => {
     location.reload();
+});
+
+// 🔇 Mute/Unmute
+const muteBtn = document.getElementById('mute-btn');
+let isMuted = false;
+
+muteBtn.addEventListener('click', () => {
+    isMuted = !isMuted;
+
+    const music = document.getElementById('bg-music');
+    const match = document.getElementById('match-sound');
+    const wrong = document.getElementById('wrong-sound');
+
+    [music, match, wrong].forEach(audio => {
+        if (audio) audio.muted = isMuted;
+    });
+
+    muteBtn.textContent = isMuted ? '🔈 Activar Sonido' : '🔇 Silenciar';
 });

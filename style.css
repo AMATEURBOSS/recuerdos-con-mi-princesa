@@ -42,18 +42,42 @@ h1 {
     pointer-events: none;
 }
 
-#restart-btn {
-    margin-top: 30px;
+#restart-btn,
+#mute-btn {
+    margin-top: 20px;
     padding: 10px 20px;
     font-size: 1rem;
-    background-color: #b83280;
-    color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
+#restart-btn {
+    background-color: #b83280;
+    color: white;
+    margin-right: 10px;
+}
+
 #restart-btn:hover {
     background-color: #a0266a;
+}
+
+#mute-btn {
+    background-color: #aaa;
+    color: white;
+}
+
+#mute-btn:hover {
+    background-color: #888;
+}
+
+@keyframes glow {
+    0% { text-shadow: 0 0 5px #ff69b4; }
+    50% { text-shadow: 0 0 20px #ff69b4; }
+    100% { text-shadow: 0 0 5px #ff69b4; }
+}
+
+.win-glow {
+    animation: glow 1s ease-in-out infinite;
 }
