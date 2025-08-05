@@ -1,8 +1,8 @@
-// 🔊 Enable music on first click + volume control
+// 🔊 Enable music after first user interaction + set volume
 document.body.addEventListener('click', () => {
     const music = document.getElementById('bg-music');
     if (music && music.paused) {
-        music.volume = 0.3;
+        music.volume = 0.3; // lower background music volume
         music.play().catch(err => {
             console.warn("Autoplay was blocked:", err);
         });
@@ -27,7 +27,7 @@ let attempts = 0;
 let matchedPairs = 0;
 const totalPairs = images.length;
 
-// Create cards
+// 🧩 Generate all cards
 shuffled.forEach(imageName => {
     const card = document.createElement('div');
     card.classList.add('card');
@@ -47,6 +47,7 @@ shuffled.forEach(imageName => {
 
             setTimeout(() => {
                 if (card.dataset.image === firstCard.dataset.image) {
+                    // ✅ Match found
                     card.classList.add('matched');
                     firstCard.classList.add('matched');
                     matchedPairs++;
@@ -65,6 +66,7 @@ shuffled.forEach(imageName => {
                     }
 
                 } else {
+                    // ❌ No match
                     card.style.backgroundImage = "url('img/back.png')";
                     firstCard.style.backgroundImage = "url('img/back.png')";
 
@@ -87,7 +89,7 @@ shuffled.forEach(imageName => {
     board.appendChild(card);
 });
 
-// 🏆 Win message with glow
+// 🏆 Win message with glow animation
 function showWinMessage() {
     const message = document.createElement('div');
     message.innerHTML = `
@@ -97,12 +99,12 @@ function showWinMessage() {
     document.body.appendChild(message);
 }
 
-// 🔁 Restart button
+// 🔁 Restart game
 document.getElementById('restart-btn').addEventListener('click', () => {
     location.reload();
 });
 
-// 🔇 Mute/Unmute
+// 🔇 Mute/Unmute ONLY background music
 const muteBtn = document.getElementById('mute-btn');
 let isMuted = false;
 
@@ -110,12 +112,7 @@ muteBtn.addEventListener('click', () => {
     isMuted = !isMuted;
 
     const music = document.getElementById('bg-music');
-    const match = document.getElementById('match-sound');
-    const wrong = document.getElementById('wrong-sound');
+    if (music) music.muted = isMuted;
 
-    [music, match, wrong].forEach(audio => {
-        if (audio) audio.muted = isMuted;
-    });
-
-    muteBtn.textContent = isMuted ? '🔈 Activar Sonido' : '🔇 Silenciar';
+    muteBtn.textContent = isMuted ? '🔈 Activar Música' : '🔇 Silenciar Música';
 });
