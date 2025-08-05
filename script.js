@@ -1,8 +1,8 @@
-// 🔊 Enable music after first user interaction + set volume
+// 🔊 Play background music after first click + set volume
 document.body.addEventListener('click', () => {
     const music = document.getElementById('bg-music');
     if (music && music.paused) {
-        music.volume = 0.3; // lower background music volume
+        music.volume = 0.3;
         music.play().catch(err => {
             console.warn("Autoplay was blocked:", err);
         });
@@ -27,7 +27,7 @@ let attempts = 0;
 let matchedPairs = 0;
 const totalPairs = images.length;
 
-// 🧩 Generate all cards
+// 🧩 Create cards dynamically
 shuffled.forEach(imageName => {
     const card = document.createElement('div');
     card.classList.add('card');
@@ -47,7 +47,6 @@ shuffled.forEach(imageName => {
 
             setTimeout(() => {
                 if (card.dataset.image === firstCard.dataset.image) {
-                    // ✅ Match found
                     card.classList.add('matched');
                     firstCard.classList.add('matched');
                     matchedPairs++;
@@ -66,7 +65,6 @@ shuffled.forEach(imageName => {
                     }
 
                 } else {
-                    // ❌ No match
                     card.style.backgroundImage = "url('img/back.png')";
                     firstCard.style.backgroundImage = "url('img/back.png')";
 
@@ -89,7 +87,7 @@ shuffled.forEach(imageName => {
     board.appendChild(card);
 });
 
-// 🏆 Win message with glow animation
+// 🎉 Final win message + sound
 function showWinMessage() {
     const message = document.createElement('div');
     message.innerHTML = `
@@ -97,6 +95,15 @@ function showWinMessage() {
     <p style="font-size: 1rem; color: #555;">Bueno... en realidad ya lo tenías 😉</p>
   `;
     document.body.appendChild(message);
+
+    const winSound = document.getElementById('win-sound');
+    if (winSound) {
+        winSound.currentTime = 0;
+        winSound.volume = 1.0;
+        winSound.play().catch(err => {
+            console.warn("Couldn't play win sound:", err);
+        });
+    }
 }
 
 // 🔁 Restart game
