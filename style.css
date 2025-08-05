@@ -8,6 +8,12 @@ body {
 
 h1 {
     color: #b83280;
+    margin-bottom: 10px;
+}
+
+#score {
+    font-size: 1.2rem;
+    color: #444;
     margin-bottom: 20px;
 }
 
@@ -35,4 +41,3 @@ h1 {
     opacity: 0.4;
     pointer-events: none;
 }
-
